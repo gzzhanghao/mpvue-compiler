@@ -1,0 +1,25 @@
+{
+  "name": "mpvue-compiler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib",
+  "scripts": {
+    "dev": "babel src -d lib -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/parser": "^7.0.0-beta.48",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "@babel/traverse": "^7.0.0-beta.49",
+    "@babel/types": "^7.0.0-beta.49",
+    "json5": "^1.0.1",
+    "lodash.clonedeep": "^4.5.0",
+    "source-map": "^0.7.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.49",
+    "babel-eslint": "^8.2.3"
+  }
+}
