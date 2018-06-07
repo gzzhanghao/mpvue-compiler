@@ -56,7 +56,7 @@ compileVue(`
         if (config.pages) {
           // @todo resolve config.pages
         }
-        // @todo emit json
+        // {page}.json = JSON.stringify(config)
         node.sourceNode = new SourceNode(null, null, null, `module.exports = function (mod) { mod.options.wxconfig = ${JSON.stringify(config)} }`)
       },
       script(node, builtin, state) {
@@ -72,7 +72,7 @@ compileVue(`
             babelPluginExtractMPMetadata,
           ],
         })
-        // @todo emit wxs
+        // {page}.filters.wxs = wxsResult.code
         state.components = {}
         for (const name of Object.keys(wxsResult.metadata.components || {})) {
           state.components[hyphenate(name)] = { src: name }
@@ -83,24 +83,31 @@ compileVue(`
           ],
         })
         node.sourceNode = new SourceNode(null, null, null, scriptResult.code)
-        // @todo emit js
       },
       async template(node, builtin, state) {
         const compiledNode = await builtin(node)
-        const wxmlResult = compileToWxml(compiledNode.compileResult, { components: state.components, name: 'name', moduleId: 'moduleId' })
 
-        // @todo emit wxml
-        console.log(wxmlResult)
+        const wxmlResult = compileToWxml(compiledNode.compileResult, {
+          components: state.components,
+          name: genComponentName(filename),
+          moduleId: genId(filename),
+        })
+
+        // {page}.wxml = wxmlResult.code
+        // slots.wxml += wxmlResult.importCode + wxmlResult.slots
+
+        // node.errors += wxmlResult.mpErrors
+        // node.tips += wxmlResult.mpTips
 
         return compiledNode
       },
       style(node) {
-        // @todo emit wxss
+        // {page}.wxss = node.sourceNode.toString()
       },
     },
   },
-}).then((res) => {
-  console.log(res.code)
-}, (err) => {
-  console.log(err)
+}).then(result => {
+  // {page}.js = result.code
+}, error => {
+  console.log(error)
 })
